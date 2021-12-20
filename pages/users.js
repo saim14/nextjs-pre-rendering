@@ -6,7 +6,7 @@ export default function UserList({ users }) {
     <div className="bg-blue-500 -mt-2">
       <h1 className="text-3xl m-2 p-2 text-white">List of Users</h1>
       {users.map((user) => (
-        <User user={user} />
+        <User key={user.key} user={user} />
       ))}
     </div>
   );
