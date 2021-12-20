@@ -1,17 +1,18 @@
-import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
 
 export default function Product({ product }) {
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
   return (
     <div>
-      <h2 className="text-lg">
-        {product.id} - {product.title}
+      <h2>
+        {product.id} {product.title} {product.price}
       </h2>
-      <p className="text-sm">Price: {product.price}</p>
-      <p className="text-sm">{product.description}</p>
-      <Link href="/products">
-        <a className="text-sm mt-2 text-blue-500">Back to products</a>
-      </Link>
+      <p>{product.description}</p>
+      <hr />
     </div>
   );
 }
@@ -22,11 +23,13 @@ export async function getStaticProps(context) {
     `http://localhost:4000/products/${params.productId}`
   );
   const data = await response.json();
+  console.log(`Generating page for /products/${params.productId}`);
 
   return {
     props: {
       product: data,
     },
+    revalidate: 10,
   };
 }
 
